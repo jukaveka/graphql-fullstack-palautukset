@@ -1,4 +1,4 @@
-export default data = {
+const data = {
   authors: [
   {
     name: 'Robert Martin',
@@ -76,3 +76,5 @@ export default data = {
   },
   ] 
 }
+
+export default data

@@ -1,6 +1,6 @@
 import { ApolloServer } from "@apollo/server"
 import { startStandaloneServer } from "@apollo/server/standalone"
-import data from "./data"
+import data from "./data.js"
 
 let authors = data.authors
 let books = data.books
@@ -10,14 +10,31 @@ let books = data.books
 */
 
 const typeDefs = `
+  type Author {
+    name: String!
+    born: Int
+    id: ID! 
+  }
+
+  type Book {
+    title: String!,
+    published: Int!,
+    author: String!,
+    genres: [String!]!,
+    id: ID!
+  }
+
   type Query {
-    dummy: Int
+    authorCount: Int!
+    bookCount: Int!
   }
 `
 
 const resolvers = {
   Query: {
-    dummy: () => 0
+
+  authorCount: () => authors.length,
+  bookCount: () => books.length
   }
 }
 
@@ -29,5 +46,5 @@ const server = new ApolloServer({
 startStandaloneServer(server, {
   listen: { port: 4000 },
 }).then(({ url }) => {
-  console.log(`Server ready at ${url}`)
+  console.log(`Server ready at ${url}`);
 })
