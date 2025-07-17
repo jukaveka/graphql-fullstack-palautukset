@@ -1,46 +1,51 @@
-import { useQuery } from "@apollo/client"
-import { GET_AUTHORS } from "../queries/authorQueries"
+import { useQuery } from "@apollo/client";
+import { GET_AUTHORS } from "../queries/authorQueries";
+import AuthorForm from "./AuthorForm";
 
 const Authors = () => {
-  const result = useQuery(GET_AUTHORS)
+  const result = useQuery(GET_AUTHORS);
 
   if (result.loading) {
-    return (
-      <div> Loading author data</div>
-    )
+    return <div> Loading author data</div>;
   }
 
   if (result.error) {
     return (
       <div>
-        <div> There was an issue with fetching authors from server - {result.error.message} </div>
+        <div>
+          There was an issue with fetching authors from server -
+          {result.error.message}
+        </div>
       </div>
-    )
+    );
   }
 
-  const authors = result.data.allAuthors
+  const authors = result.data.allAuthors;
 
   return (
     <div>
-      <h2>authors</h2>
-      <table>
-        <tbody>
-          <tr>
-            <th></th>
-            <th>born</th>
-            <th>books</th>
-          </tr>
-          {authors.map((a) => (
-            <tr key={a.name}>
-              <td>{a.name}</td>
-              <td>{a.born}</td>
-              <td>{a.bookCount}</td>
+      <div>
+        <h2>authors</h2>
+        <table>
+          <tbody>
+            <tr>
+              <th></th>
+              <th>born</th>
+              <th>books</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+            {authors.map((a) => (
+              <tr key={a.name}>
+                <td>{a.name}</td>
+                <td>{a.born}</td>
+                <td>{a.bookCount}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <AuthorForm />
     </div>
-  )
-}
+  );
+};
 
-export default Authors
+export default Authors;
