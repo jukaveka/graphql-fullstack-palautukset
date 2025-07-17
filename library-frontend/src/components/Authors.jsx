@@ -12,7 +12,9 @@ const Authors = () => {
 
   if (result.error) {
     return (
-      <div> There was an issue with fetching authors from server</div>
+      <div>
+        <div> There was an issue with fetching authors from server - {result.error.message} </div>
+      </div>
     )
   }
 
