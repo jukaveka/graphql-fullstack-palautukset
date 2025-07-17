@@ -43,7 +43,7 @@ const Authors = () => {
           </tbody>
         </table>
       </div>
-      <AuthorForm />
+      <AuthorForm authors={authors}/>
     </div>
   );
 };
