@@ -83,7 +83,7 @@ const resolvers = {
 
       const authorNames = authors.map(author => author.name)
       if (!authorNames.includes(newBook.author)) {
-        const newAuthor = { name: newBook.author }
+        const newAuthor = { name: newBook.author, id: uuid() }
         authors = authors.concat(newAuthor)
       }
 
