@@ -1,12 +1,14 @@
-import { ApolloServer } from "@apollo/server"
-import { startStandaloneServer } from "@apollo/server/standalone"
-import { v4 as uuid } from "uuid"
-import data from "./data.js"
+const { ApolloServer } = require("@apollo/server")
+const { startStandaloneServer } = require("@apollo/server/standalone")
+const { v4: uuid } = require("uuid")
 
-import "dotenv/config"
+require("dotenv").config()
 
-import mongoose from "mongoose"
+const mongoose = require("mongoose")
 mongoose.set("strictQuery", false)
+
+const Author = require("./models/AuthorModel")
+const Book = require("./models/BookModel")
 
 const MONGODB_URI = process.env.MONGODB_URI
 
@@ -20,13 +22,6 @@ mongoose.connect(MONGODB_URI)
     console.log("Couldn't connect to database")
     console.log(error.message)
   })
-
-let authors = data.authors
-let books = data.books
-
-/*
-  you can remove the placeholder query once your first one has been implemented 
-*/
 
 const typeDefs = `
   type Author {
