@@ -99,14 +99,12 @@ const resolvers = {
   Mutation: {
     addBook: async (root, args) => {
       const authorInDb = await Author.findOne({ name: args.author })
-      console.log(authorInDb)
       if (!authorInDb) {
         const newAuthor = new Author({ name: args.author })
         await newAuthor.save()
       }
 
       const author = await Author.findOne({ name: args.author })
-      console.log(author)
 
       const book = new Book({ ...args, author: author.id })
       await book.save()
