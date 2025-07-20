@@ -3,6 +3,24 @@ import { startStandaloneServer } from "@apollo/server/standalone"
 import { v4 as uuid } from "uuid"
 import data from "./data.js"
 
+import "dotenv/config"
+
+import mongoose from "mongoose"
+mongoose.set("strictQuery", false)
+
+const MONGODB_URI = process.env.MONGODB_URI
+
+console.log("Connecting to database", MONGODB_URI)
+
+mongoose.connect(MONGODB_URI)
+  .then(() => {
+    console.log("Connected to database")
+  })
+  .catch((error) => {
+    console.log("Couldn't connect to database")
+    console.log(error.message)
+  })
+
 let authors = data.authors
 let books = data.books
 
