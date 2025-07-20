@@ -7,6 +7,7 @@ const { startStandaloneServer } = require("@apollo/server/standalone")
 
 const Author = require("./models/AuthorModel")
 const Book = require("./models/BookModel")
+const { GraphQLError } = require("graphql")
 
 const MONGODB_URI = process.env.MONGODB_URI
 console.log("Connecting to database", MONGODB_URI)
@@ -101,13 +102,30 @@ const resolvers = {
       const authorInDb = await Author.findOne({ name: args.author })
       if (!authorInDb) {
         const newAuthor = new Author({ name: args.author })
-        await newAuthor.save()
+
+        try {
+          await newAuthor.save()
+        } catch (error) {
+          throw new GraphQLError("Error faced while saving new author", {
+            code: "BAD_USER_INPUT",
+            invalidArgs: args.author,
+            error,
+          })
+        }
       }
 
       const author = await Author.findOne({ name: args.author })
 
       const book = new Book({ ...args, author: author.id })
-      await book.save()
+
+      try {
+        await book.save()
+      } catch (error) {
+        throw new GraphQLError("Error while saving new book", {
+          code: "BAD_USER_INPUT",
+          error,
+        })
+      }
 
       return book.populate("author")
     },
@@ -119,7 +137,12 @@ const resolvers = {
       }
 
       author.born = args.setBornTo
-      return author.save()
+      return author.save().catch((error) => {
+        throw new GraphQLError("Error while saving edited author", {
+          code: "BAD_USER_INPUT",
+          error,
+        })
+      })
     },
   },
 }
