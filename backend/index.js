@@ -1,6 +1,7 @@
 require("dotenv").config()
 const mongoose = require("mongoose")
 mongoose.set("strictQuery", false)
+const jwt = require("jsonwebtoken")
 
 const { ApolloServer } = require("@apollo/server")
 const { startStandaloneServer } = require("@apollo/server/standalone")
@@ -166,7 +167,6 @@ const resolvers = {
     },
 
     createUser: async (root, args) => {
-      console.log(args)
       const user = new User({ ...args })
 
       return user.save().catch((error) => {
@@ -175,6 +175,23 @@ const resolvers = {
           error,
         })
       })
+    },
+
+    login: async (root, args) => {
+      const user = User.find({ username: args.username })
+
+      if (!user || args.password !== "salasana") {
+        throw new GraphQLError("Wrong username or password", {
+          code: "BAD_USER_INPUT",
+        })
+      }
+
+      const tokenUser = {
+        username: user.username,
+        id: user._id,
+      }
+
+      return { value: jwt.sign(tokenUser, process.env.JWT_SECRET) }
     },
   },
 }
