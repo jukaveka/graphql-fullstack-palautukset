@@ -1,17 +1,14 @@
-const { ApolloServer } = require("@apollo/server")
-const { startStandaloneServer } = require("@apollo/server/standalone")
-const { v4: uuid } = require("uuid")
-
 require("dotenv").config()
-
 const mongoose = require("mongoose")
 mongoose.set("strictQuery", false)
+
+const { ApolloServer } = require("@apollo/server")
+const { startStandaloneServer } = require("@apollo/server/standalone")
 
 const Author = require("./models/AuthorModel")
 const Book = require("./models/BookModel")
 
 const MONGODB_URI = process.env.MONGODB_URI
-
 console.log("Connecting to database", MONGODB_URI)
 
 mongoose
