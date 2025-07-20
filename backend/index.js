@@ -34,7 +34,7 @@ const typeDefs = `
   type Book {
     title: String!,
     published: Int!,
-    author: String!,
+    author: Author!,
     genres: [String!]!,
     id: ID!
   }
@@ -91,30 +91,33 @@ const resolvers = {
   },
 
   Mutation: {
-    addBook: (root, args) => {
-      const newBook = { ...args, id: uuid()}
-
-      const authorNames = authors.map(author => author.name)
-      if (!authorNames.includes(newBook.author)) {
-        const newAuthor = { name: newBook.author, id: uuid() }
-        authors = authors.concat(newAuthor)
+    addBook: async (root, args) => {
+      const authorInDb = await Author.findOne({ name: args.author })
+      console.log(authorInDb)
+      if (!authorInDb) {
+        const newAuthor = new Author({ name: args.author })
+        await newAuthor.save()
       }
 
-      books = books.concat(newBook)
-      return newBook
+      const author = await Author.findOne({ name: args.author })
+      console.log(author)
+
+      const book = new Book({ ...args, author: author.id })
+      await book.save()
+
+      return book.populate("author")
     },
 
-    editAuthor: (root, args) => {
-      const authorToEdit = authors.find(author => author.name === args.name)
-      if (!authorToEdit) {
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({ name: args.name })
+      if (!author) {
         return null
       }
 
-      const editedAuthor = { ...authorToEdit, born: args.setBornTo }
-      authors = authors.map(author => author.name !== args.name ? author : editedAuthor)
-      return editedAuthor
-    }
-  }
+      author.born = args.setBornTo
+      return author.save()
+    },
+  },
 }
 
 const server = new ApolloServer({
@@ -125,5 +128,5 @@ const server = new ApolloServer({
 startStandaloneServer(server, {
   listen: { port: 4000 },
 }).then(({ url }) => {
-  console.log(`Server ready at ${url}`);
+  console.log(`Server ready at ${url}`)
 })
