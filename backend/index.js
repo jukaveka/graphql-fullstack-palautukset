@@ -120,7 +120,17 @@ const resolvers = {
   },
 
   Mutation: {
-    addBook: async (root, args) => {
+    addBook: async (root, args, context) => {
+      const currentUser = context.currentUser
+
+      if (!currentUser) {
+        throw new GraphQLError("Authentication required", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+          },
+        })
+      }
+
       const authorInDb = await Author.findOne({ name: args.author })
       if (!authorInDb) {
         const newAuthor = new Author({ name: args.author })
@@ -152,7 +162,17 @@ const resolvers = {
       return book.populate("author")
     },
 
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, context) => {
+      const currentUser = context.currentUser
+
+      if (!currentUser) {
+        throw new GraphQLError("Authentication required", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+          },
+        })
+      }
+
       const author = await Author.findOne({ name: args.name })
       if (!author) {
         return null
