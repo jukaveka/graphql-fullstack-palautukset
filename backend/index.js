@@ -4,10 +4,11 @@ mongoose.set("strictQuery", false)
 
 const { ApolloServer } = require("@apollo/server")
 const { startStandaloneServer } = require("@apollo/server/standalone")
+const { GraphQLError } = require("graphql")
 
 const Author = require("./models/AuthorModel")
 const Book = require("./models/BookModel")
-const { GraphQLError } = require("graphql")
+const User = require("./models/UserModel")
 
 const MONGODB_URI = process.env.MONGODB_URI
 console.log("Connecting to database", MONGODB_URI)
@@ -31,16 +32,16 @@ const typeDefs = `
   }
 
   type Book {
-    title: String!,
-    published: Int!,
-    author: Author!,
-    genres: [String!]!,
+    title: String!
+    published: Int!
+    author: Author!
+    genres: [String!]!
     id: ID!
   }
 
   type User {
-    username: String!,
-    favoriteGenre: String!,
+    username: String!
+    favoriteGenre: String!
     id: ID!
   }
 
@@ -67,11 +68,11 @@ const typeDefs = `
       name: String!
       setBornTo: Int!
     ): Author
-    createuser: (
+    createUser(
       username: String!
       favoriteGenre: String!
     ): User
-    login: (
+    login(
       username: String!
       password: String!
     ): Token
@@ -158,6 +159,18 @@ const resolvers = {
       author.born = args.setBornTo
       return author.save().catch((error) => {
         throw new GraphQLError("Error while saving edited author", {
+          code: "BAD_USER_INPUT",
+          error,
+        })
+      })
+    },
+
+    createUser: async (root, args) => {
+      console.log(args)
+      const user = new User({ ...args })
+
+      return user.save().catch((error) => {
+        throw new GraphQLError("Error while saving new user", {
           code: "BAD_USER_INPUT",
           error,
         })
