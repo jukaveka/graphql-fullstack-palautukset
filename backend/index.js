@@ -14,7 +14,8 @@ const MONGODB_URI = process.env.MONGODB_URI
 
 console.log("Connecting to database", MONGODB_URI)
 
-mongoose.connect(MONGODB_URI)
+mongoose
+  .connect(MONGODB_URI)
   .then(() => {
     console.log("Connected to database")
   })
@@ -62,10 +63,11 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    authorCount: () => authors.length,
-    bookCount: () => books.length,
+    authorCount: () => Author.collection.countDocuments(),
+    bookCount: () => Book.collection.countDocuments(),
 
-    allBooks: (root, args) => {
+    allBooks: async (root, args) => {
+      const books = await Book.find({}).populate("author")
       if (!args.author && !args.genre) {
         return books
       }
@@ -73,17 +75,21 @@ const resolvers = {
       let filteredBooks = books
 
       if (args.author) {
-        filteredBooks = filteredBooks.filter(book => book.author === args.author)
+        filteredBooks = filteredBooks.filter(
+          (book) => book.author.name === args.author
+        )
       }
 
       if (args.genre) {
-        filteredBooks = filteredBooks.filter(book => book.genres.includes(args.genre))
+        filteredBooks = filteredBooks.filter((book) =>
+          book.genres.includes(args.genre)
+        )
       }
 
       return filteredBooks
     },
 
-    allAuthors: () => authors
+    allAuthors: () => Author.find({}),
   },
 
   Author: {
