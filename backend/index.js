@@ -109,6 +109,7 @@ const resolvers = {
     },
 
     allAuthors: async () => Author.find({}),
+    me: (root, args, context) => context.currentUser,
   },
 
   Author: {
@@ -178,7 +179,7 @@ const resolvers = {
     },
 
     login: async (root, args) => {
-      const user = User.find({ username: args.username })
+      const user = await User.findOne({ username: args.username })
 
       if (!user || args.password !== "salasana") {
         throw new GraphQLError("Wrong username or password", {
@@ -203,6 +204,20 @@ const server = new ApolloServer({
 
 startStandaloneServer(server, {
   listen: { port: 4000 },
+  context: async ({ req, res }) => {
+    console.log(req.headers)
+    const auth = req ? req.headers.authorization : null
+
+    console.log(auth)
+
+    if (auth && auth.startsWith("Bearer ")) {
+      const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET)
+
+      const currentUser = await User.findById(decodedToken.id)
+
+      return { currentUser }
+    }
+  },
 }).then(({ url }) => {
   console.log(`Server ready at ${url}`)
 })
