@@ -6,7 +6,7 @@ import { GET_AUTHORS } from "../queries/authorQueries"
 const NewBook = () => {
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
-  const [published, setPublished] = useState(null)
+  const [published, setPublished] = useState("")
   const [genre, setGenre] = useState("")
   const [genres, setGenres] = useState([])
 
