@@ -1,5 +1,6 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Route, Routes } from "react-router"
+import { useApolloClient } from "@apollo/client"
 
 import Authors from "./components/Authors"
 import Books from "./components/Books"
@@ -10,11 +11,26 @@ import LoginForm from "./components/LoginForm"
 
 const App = () => {
   const [token, setToken] = useState()
+  const client = useApolloClient()
+
+  useEffect(() => {
+    const tokenInBrowser = localStorage.getItem("library-app-user-token")
+
+    if (tokenInBrowser) {
+      setToken(tokenInBrowser)
+    }
+  }, [])
+
+  const handleLogout = () => {
+    setToken(null)
+    localStorage.removeItem("library-app-user-token")
+    client.resetStore()
+  }
 
   return (
     <div>
       <div>
-        <Menu token={token} />
+        <Menu token={token} handleLogout={handleLogout} />
       </div>
       <div>
         <Routes>

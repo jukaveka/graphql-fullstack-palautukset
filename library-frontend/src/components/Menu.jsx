@@ -1,6 +1,6 @@
 import { Link } from "react-router"
 
-const Menu = ({ token }) => {
+const Menu = ({ token, handleLogout }) => {
   return (
     <div>
       <Link to="/">
@@ -17,17 +17,16 @@ const Menu = ({ token }) => {
           <button> Login </button>
         </Link>
       )}
-      {token &&
-        ((
+      {token && (
+        <>
           <Link to="/books/new">
             <button> New </button>
           </Link>
-        ),
-        (
           <Link to="/">
-            <button> Logout </button>
+            <button onClick={handleLogout}> Logout </button>
           </Link>
-        ))}
+        </>
+      )}
     </div>
   )
 }

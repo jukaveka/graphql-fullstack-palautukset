@@ -1,13 +1,35 @@
-import { useState } from "react"
+import { useMutation } from "@apollo/client"
+import { useEffect, useState } from "react"
+import { LOGIN } from "../queries/userQueries"
+import { useNavigate } from "react-router"
 
 const LoginForm = ({ setToken }) => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const navigate = useNavigate()
+
+  const [login, result] = useMutation(LOGIN, {
+    onError: (error) => {
+      console.log(error.message)
+    },
+  })
+
+  useEffect(() => {
+    if (result.data) {
+      console.log(result.data.login)
+      const token = result.data.login.value
+      console.log("Token", token)
+      setToken(token)
+      localStorage.setItem("library-app-user-token", token)
+    }
+  }, [result.data])
 
   const handleLogin = (event) => {
     event.preventDefault()
 
-    console.log(username, password)
+    login({ variables: { username, password } })
+
+    navigate("/")
   }
   return (
     <div>
