@@ -1,12 +1,12 @@
-import { useQuery } from "@apollo/client";
-import { GET_AUTHORS } from "../queries/authorQueries";
-import AuthorForm from "./AuthorForm";
+import { useQuery } from "@apollo/client"
+import { GET_AUTHORS } from "../queries/authorQueries"
+import AuthorForm from "./AuthorForm"
 
 const Authors = () => {
-  const result = useQuery(GET_AUTHORS);
+  const result = useQuery(GET_AUTHORS)
 
   if (result.loading) {
-    return <div> Loading author data</div>;
+    return <div> Loading author data</div>
   }
 
   if (result.error) {
@@ -17,10 +17,10 @@ const Authors = () => {
           {result.error.message}
         </div>
       </div>
-    );
+    )
   }
 
-  const authors = result.data.allAuthors;
+  const authors = result.data.allAuthors
 
   return (
     <div>
@@ -43,9 +43,9 @@ const Authors = () => {
           </tbody>
         </table>
       </div>
-      <AuthorForm authors={authors}/>
+      <AuthorForm authors={authors} />
     </div>
-  );
-};
+  )
+}
 
-export default Authors;
+export default Authors

@@ -1,23 +1,23 @@
-import { useState } from "react";
-import { GET_AUTHORS, UPDATE_AUTHOR_BORN } from "../queries/authorQueries";
-import { useMutation } from "@apollo/client";
+import { useState } from "react"
+import { GET_AUTHORS, UPDATE_AUTHOR_BORN } from "../queries/authorQueries"
+import { useMutation } from "@apollo/client"
 
 const AuthorForm = ({ authors }) => {
-  const [name, setName] = useState("");
-  const [born, setBorn] = useState("");
+  const [name, setName] = useState("")
+  const [born, setBorn] = useState("")
 
   const [updateAuthorBorn] = useMutation(UPDATE_AUTHOR_BORN, {
     refetchQueries: [{ query: GET_AUTHORS }],
-  });
+  })
 
   const handleAuthorForm = (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
-    updateAuthorBorn({ variables: { name, born: parseInt(born) } });
+    updateAuthorBorn({ variables: { name, born: parseInt(born) } })
 
-    setName("");
-    setBorn("");
-  };
+    setName("")
+    setBorn("")
+  }
 
   return (
     <div>
@@ -28,9 +28,11 @@ const AuthorForm = ({ authors }) => {
         <div>
           <label htmlFor="author-name-input"> Author </label>
           <select value={name} onChange={({ target }) => setName(target.value)}>
-            {authors.map(author => {
+            {authors.map((author, index) => {
               return (
-                <option value={author.name}> {author.name} </option>
+                <option key={`option-${index}`} value={author.name}>
+                  {author.name}
+                </option>
               )
             })}
           </select>
@@ -48,7 +50,7 @@ const AuthorForm = ({ authors }) => {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default AuthorForm;
+export default AuthorForm

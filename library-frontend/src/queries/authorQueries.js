@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from "@apollo/client"
 
 export const GET_AUTHORS = gql`
   query {
@@ -9,7 +9,7 @@ export const GET_AUTHORS = gql`
       id
     }
   }
-`;
+`
 
 export const UPDATE_AUTHOR_BORN = gql`
   mutation updateAuthorBorn($name: String!, $born: Int!) {
@@ -20,4 +20,4 @@ export const UPDATE_AUTHOR_BORN = gql`
       id
     }
   }
-`;
+`

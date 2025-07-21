@@ -5,15 +5,11 @@ const Books = () => {
   const result = useQuery(GET_BOOKS)
 
   if (result.loading) {
-    return (
-      <div> Loading book data</div>
-    )
+    return <div> Loading book data</div>
   }
 
   if (result.error) {
-    return (
-      <div> There was an issue with fetching books from server</div>
-    )
+    return <div> There was an issue with fetching books from server</div>
   }
 
   const books = result.data.allBooks
