@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client"
 import { useState } from "react"
-import { GET_BOOKS, NEW_BOOK } from "../queries/bookQueries"
+import { GET_BOOKS, GET_GENRES, NEW_BOOK } from "../queries/bookQueries"
 import { GET_AUTHORS } from "../queries/authorQueries"
 
 const NewBook = () => {
@@ -11,7 +11,11 @@ const NewBook = () => {
   const [genres, setGenres] = useState([])
 
   const [newBook] = useMutation(NEW_BOOK, {
-    refetchQueries: [{ query: GET_BOOKS }, { query: GET_AUTHORS }],
+    refetchQueries: [
+      { query: GET_BOOKS },
+      { query: GET_AUTHORS },
+      { query: GET_GENRES },
+    ],
   })
 
   const submit = async (event) => {
@@ -35,30 +39,39 @@ const NewBook = () => {
 
   return (
     <div>
+      <h3> Add new book </h3>
       <form onSubmit={submit}>
         <div>
-          title
+          <label> Title </label>
+          <br />
           <input
             value={title}
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
+        <br />
         <div>
-          author
+          <label> Author </label>
+          <br />
           <input
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
+        <br />
         <div>
-          published
+          <label> Published </label>
+          <br />
           <input
             type="number"
             value={published}
             onChange={({ target }) => setPublished(target.value)}
           />
         </div>
+        <br />
         <div>
+          <label> Add genres </label>
+          <br />
           <input
             value={genre}
             onChange={({ target }) => setGenre(target.value)}
@@ -67,7 +80,9 @@ const NewBook = () => {
             add genre
           </button>
         </div>
-        <div>genres: {genres.join(" ")}</div>
+        <br />
+        <div>Genres : {genres.join(", ")}</div>
+        <br />
         <button type="submit">create book</button>
       </form>
     </div>
