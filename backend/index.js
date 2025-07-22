@@ -124,7 +124,7 @@ const resolvers = {
     recommendations: async (root, args, context) => {
       const user = context.currentUser
 
-      return await Book.find({ genres: user.favoriteGenre }).populate("author")
+      return Book.find({ genres: user.favoriteGenre }).populate("author")
     },
   },
 
