@@ -44,3 +44,19 @@ export const GET_GENRES = gql`
     allGenres
   }
 `
+
+export const GET_RECOMMENDATIONS = gql`
+  query {
+    recommendations {
+      title
+      published
+      genres
+      id
+      author {
+        name
+        born
+        id
+      }
+    }
+  }
+`

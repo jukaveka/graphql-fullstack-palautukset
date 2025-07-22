@@ -22,6 +22,9 @@ const Menu = ({ token, handleLogout }) => {
           <Link to="/books/new">
             <button> New </button>
           </Link>
+          <Link to="/recommendations">
+            <button> For you </button>
+          </Link>
           <Link to="/">
             <button onClick={handleLogout}> Logout </button>
           </Link>

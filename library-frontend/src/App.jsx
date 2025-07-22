@@ -8,6 +8,7 @@ import NewBook from "./components/NewBook"
 import Menu from "./components/Menu"
 import Home from "./components/Home"
 import LoginForm from "./components/LoginForm"
+import Recommended from "./components/Recommended"
 
 const App = () => {
   const [token, setToken] = useState()
@@ -38,6 +39,10 @@ const App = () => {
           <Route path="/authors" element={<Authors />} />
           <Route path="/books" element={<Books />} />
           <Route path="/books/new" element={<NewBook />} />
+          <Route
+            path="/recommendations"
+            element={<Recommended token={token} />}
+          />
           <Route path="/login" element={<LoginForm setToken={setToken} />} />
         </Routes>
       </div>
