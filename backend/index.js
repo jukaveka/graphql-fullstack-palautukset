@@ -57,6 +57,7 @@ const typeDefs = `
     allAuthors: [Author!]!
     me: User
     allGenres: [String!]!
+    recommendations: [Book!]!
   }
 
   type Mutation {
@@ -118,6 +119,12 @@ const resolvers = {
       const genreSet = new Set(genres)
 
       return Array.from(genreSet)
+    },
+
+    recommendations: async (root, args, context) => {
+      const user = context.currentUser
+
+      return await Book.find({ genres: user.favoriteGenre }).populate("author")
     },
   },
 
