@@ -236,6 +236,7 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  formatError: (err) => console.log(err),
 })
 
 startStandaloneServer(server, {
