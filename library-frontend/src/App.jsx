@@ -30,7 +30,7 @@ const App = () => {
     onData: ({ data }) => {
       console.log(data)
       const addedBook = data.data.bookAdded
-      notifyUser(`Book ${addedBook.title} added to list`)
+      notifyUser(`${addedBook.title} was added to list of books`)
 
       client.cache.updateQuery({ query: GET_BOOKS }, ({ allBooks }) => {
         return {

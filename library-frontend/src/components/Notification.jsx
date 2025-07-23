@@ -1,14 +1,12 @@
 import { Alert } from "@mui/material"
 
 const Notification = ({ notification }) => {
-  console.log(notification)
-
   if (!notification) {
     return null
   }
 
   return (
-    <div>
+    <div style={{ padding: "10px", width: "300px" }}>
       <Alert severity="info">{notification}</Alert>
     </div>
   )
