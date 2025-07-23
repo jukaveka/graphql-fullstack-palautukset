@@ -11,9 +11,11 @@ import LoginForm from "./components/LoginForm"
 import Recommended from "./components/Recommended"
 
 import { BOOK_ADDED, GET_BOOKS } from "./queries/bookQueries"
+import Notification from "./components/Notification"
 
 const App = () => {
   const [token, setToken] = useState()
+  const [notification, setNotification] = useState(null)
   const client = useApolloClient()
 
   useEffect(() => {
@@ -28,7 +30,7 @@ const App = () => {
     onData: ({ data }) => {
       console.log(data)
       const addedBook = data.data.bookAdded
-      window.alert(`Book ${addedBook.title} added to list`)
+      notifyUser(`Book ${addedBook.title} added to list`)
 
       client.cache.updateQuery({ query: GET_BOOKS }, ({ allBooks }) => {
         return {
@@ -37,6 +39,13 @@ const App = () => {
       })
     },
   })
+
+  const notifyUser = (message) => {
+    setNotification(message)
+    setTimeout(() => {
+      setNotification(null)
+    }, 10000)
+  }
 
   const handleLogout = () => {
     setToken(null)
@@ -48,6 +57,9 @@ const App = () => {
     <div>
       <div>
         <Menu token={token} handleLogout={handleLogout} />
+      </div>
+      <div>
+        <Notification notification={notification} />
       </div>
       <div>
         <Routes>
