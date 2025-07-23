@@ -54,10 +54,7 @@ const resolvers = {
   },
 
   Author: {
-    bookCount: async (root) => {
-      const books = await Book.find({ author: root.id })
-      return books.length
-    },
+    bookCount: (root) => root.books.length,
   },
 
   Mutation: {
@@ -88,8 +85,17 @@ const resolvers = {
       }
 
       const author = await Author.findOne({ name: args.author })
-
       const book = new Book({ ...args, author: author.id })
+      author.books = author.books.concat(book.id)
+
+      try {
+        await author.save()
+      } catch (error) {
+        throw new GraphQLError("Error while adding book to author", {
+          code: "BAD_USER_INPUT",
+          error,
+        })
+      }
 
       try {
         await book.save()
