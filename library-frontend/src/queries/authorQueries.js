@@ -1,23 +1,28 @@
 import { gql } from "@apollo/client"
 
+export const AUTHOR_DETAILS = gql`
+  fragment AuthorDetails on Author {
+    name
+    born
+    bookCount
+    id
+  }
+`
+
 export const GET_AUTHORS = gql`
   query {
     allAuthors {
-      name
-      born
-      bookCount
-      id
+      ...AuthorDetails
     }
   }
+  ${AUTHOR_DETAILS}
 `
 
 export const UPDATE_AUTHOR_BORN = gql`
   mutation updateAuthorBorn($name: String!, $born: Int!) {
     editAuthor(name: $name, setBornTo: $born) {
-      name
-      born
-      bookCount
-      id
+      ...AuthorDetails
     }
   }
+  ${AUTHOR_DETAILS}
 `
