@@ -30,9 +30,9 @@ const App = () => {
       const addedBook = data.data.bookAdded
       window.alert(`Book ${addedBook.title} added to list`)
 
-      client.cache.updateQuery({ query: GET_BOOKS }, ({ books }) => {
+      client.cache.updateQuery({ query: GET_BOOKS }, ({ allBooks }) => {
         return {
-          books: books.concat(addedBook),
+          allBooks: allBooks.concat(addedBook),
         }
       })
     },
