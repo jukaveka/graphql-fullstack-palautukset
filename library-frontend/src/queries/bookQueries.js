@@ -56,3 +56,12 @@ export const GET_RECOMMENDATIONS = gql`
   }
   ${BOOK_DETAILS}
 `
+
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      ...BookDetails
+    }
+  }
+  ${BOOK_DETAILS}
+`

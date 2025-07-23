@@ -14,16 +14,6 @@ import { getMainDefinition } from "@apollo/client/utilities"
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions"
 import { createClient } from "graphql-ws"
 
-const httpLink = createHttpLink({
-  uri: "http://localhost:4000",
-})
-
-const wsLink = new GraphQLWsLink(
-  createClient({
-    url: "ws://localhost:4000",
-  })
-)
-
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("library-app-user-token")
   return {
@@ -33,6 +23,12 @@ const authLink = setContext((_, { headers }) => {
     },
   }
 })
+
+const httpLink = createHttpLink({
+  uri: "http://localhost:4000",
+})
+
+const wsLink = new GraphQLWsLink(createClient({ url: "ws://localhost:4000" }))
 
 const splitLink = split(
   ({ query }) => {

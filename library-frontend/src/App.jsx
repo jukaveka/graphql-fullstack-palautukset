@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Route, Routes } from "react-router"
-import { useApolloClient } from "@apollo/client"
+import { useApolloClient, useSubscription } from "@apollo/client"
 
 import Authors from "./components/Authors"
 import Books from "./components/Books"
@@ -9,6 +9,8 @@ import Menu from "./components/Menu"
 import Home from "./components/Home"
 import LoginForm from "./components/LoginForm"
 import Recommended from "./components/Recommended"
+
+import { BOOK_ADDED, GET_BOOKS } from "./queries/bookQueries"
 
 const App = () => {
   const [token, setToken] = useState()
@@ -21,6 +23,20 @@ const App = () => {
       setToken(tokenInBrowser)
     }
   }, [])
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      console.log(data)
+      const addedBook = data.data.bookAdded
+      window.alert(`Book ${addedBook.title} added to list`)
+
+      client.cache.updateQuery({ query: GET_BOOKS }, ({ books }) => {
+        return {
+          books: books.concat(addedBook),
+        }
+      })
+    },
+  })
 
   const handleLogout = () => {
     setToken(null)
