@@ -64,7 +64,7 @@ const App = () => {
       <div>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/authors" element={<Authors />} />
+          <Route path="/authors" element={<Authors token={token} />} />
           <Route path="/books" element={<Books />} />
           <Route path="/books/new" element={<NewBook />} />
           <Route

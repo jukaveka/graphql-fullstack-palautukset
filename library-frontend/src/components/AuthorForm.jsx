@@ -3,7 +3,7 @@ import { GET_AUTHORS, UPDATE_AUTHOR_BORN } from "../queries/authorQueries"
 import { useMutation } from "@apollo/client"
 
 const AuthorForm = ({ authors }) => {
-  const [name, setName] = useState("")
+  const [name, setName] = useState("Choose")
   const [born, setBorn] = useState("")
 
   const [updateAuthorBorn] = useMutation(UPDATE_AUTHOR_BORN, {
@@ -15,7 +15,7 @@ const AuthorForm = ({ authors }) => {
 
     updateAuthorBorn({ variables: { name, born: parseInt(born) } })
 
-    setName("")
+    setName("None")
     setBorn("")
   }
 
@@ -28,6 +28,9 @@ const AuthorForm = ({ authors }) => {
         <div>
           <label htmlFor="author-name-input"> Author </label>
           <select value={name} onChange={({ target }) => setName(target.value)}>
+            <option key="no-chosen-author" value="Choose">
+              Choose
+            </option>
             {authors.map((author, index) => {
               return (
                 <option key={`option-${index}`} value={author.name}>
