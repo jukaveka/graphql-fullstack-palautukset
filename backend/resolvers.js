@@ -1,3 +1,5 @@
+const { PubSub } = require("graphql-subscriptions")
+const pubSub = new PubSub()
 const { GraphQLError } = require("graphql")
 const jwt = require("jsonwebtoken")
 
@@ -98,6 +100,8 @@ const resolvers = {
         })
       }
 
+      pubSub.publish("BOOK_ADDED", { bookAdded: book.populate("author") })
+
       return book.populate("author")
     },
 
@@ -152,6 +156,12 @@ const resolvers = {
       }
 
       return { value: jwt.sign(tokenUser, process.env.JWT_SECRET) }
+    },
+  },
+
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubSub.asyncIterableIterator("BOOK_ADDED"),
     },
   },
 }

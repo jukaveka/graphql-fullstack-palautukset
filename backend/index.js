@@ -10,8 +10,8 @@ const {
 } = require("@apollo/server/plugin/drainHttpServer")
 const { makeExecutableSchema } = require("@graphql-tools/schema")
 
-const { WebSocketServer, WebSocketServer } = require("ws")
-const { useServer } = require("graphql-ws/lib/use/ws")
+const { WebSocketServer } = require("ws")
+const { useServer } = require("graphql-ws/use/ws")
 
 const jwt = require("jsonwebtoken")
 const mongoose = require("mongoose")
@@ -21,6 +21,7 @@ const resolvers = require("./resolvers")
 const typeDefs = require("./schema")
 
 const User = require("./models/UserModel")
+const { formatError } = require("graphql")
 
 const MONGODB_URI = process.env.MONGODB_URI
 console.log("Connecting to database", MONGODB_URI)
@@ -61,6 +62,10 @@ const start = async () => {
         },
       },
     ],
+    formatError: (formattedError, error) => {
+      console.log(formattedError)
+      console.log(error)
+    },
   })
 
   await server.start()
